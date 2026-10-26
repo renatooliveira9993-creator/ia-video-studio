@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#171027">
+<title>IA Vídeo Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#100c1c;color:#f7f3ff;font-family:Arial,sans-serif}
+header{padding:24px 18px;background:linear-gradient(120deg,#39205c,#171027)}
+header h1{margin:0;font-size:26px}
+header p{color:#d6c9ee;margin-bottom:0}
+main{max-width:700px;margin:auto;padding:15px}
+.card{background:#201831;border:1px solid #443258;border-radius:18px;padding:18px;margin-bottom:16px}
+h2{font-size:19px;margin-top:0}
+label{display:block;margin:15px 0 7px;font-weight:bold}
+input,textarea,select{width:100%;padding:12px;border:1px solid #59456f;border-radius:10px;background:#100c1c;color:white;font-size:16px}
+textarea{min-height:90px;resize:vertical}
+button{padding:12px;border:0;border-radius:10px;background:#a78bfa;color:#170e29;font-size:15px;font-weight:bold;cursor:pointer}
+.primary{width:100%;margin-top:18px;padding:15px}
+.secondary{background:#392b50;color:white;border:1px solid #66517e}
+.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.row button{flex:1}
+.result{white-space:pre-wrap;line-height:1.65;font-size:14px;overflow-wrap:anywhere}
+.muted{font-size:13px;color:#c0b3d2;line-height:1.5}
+.project{padding:12px;border:1px solid #59456f;border-radius:10px;margin-top:9px}
+footer{text-align:center;padding:20px;color:#b8a9ce;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>✨ IA Vídeo Studio</h1>
+  <p>Transforme suas ideias em projetos de vídeos!</p>
+</header>
+<main>
+<section class="card">
+<h2>🎬 Criar vídeo</h2>
+
+<label for="tema">Qual é o tema do vídeo?</label>
+<textarea id="tema" placeholder="Ex.: Como fazer onigiri japonês">Como fazer onigiri japonês</textarea>
+
+<label for="categoria">Categoria</label>
+<select id="categoria">
+<option>Culinária internacional</option>
+<option>Minecraft e games</option>
+<option>Curiosidades</option>
+<option>Histórias narradas</option>
+<option>Animação e fantasia</option>
+<option>Educação</option>
+</select>
+
+<label for="formato">Formato</label>
+<select id="formato">
+<option>Vertical 9:16 - YouTube Shorts</option>
+<option>Horizontal 16:9 - YouTube</option>
+</select>
+
+<label for="duracao">Duração</label>
+<select id="duracao">
+<option>15 segundos</option>
+<option selected>30 segundos</option>
+<option>60 segundos</option>
+<option>3 minutos</option>
+</select>
+
+<label for="visual">Estilo visual</label>
+<select id="visual">
+<option>Realista cinematográfico</option>
+<option>Anime</option>
+<option>Animação 3D</option>
+<option>Documentário</option>
+<option>Vídeo dinâmico para redes sociais</option>
+</select>
+
+<label for="voz">Narração</label>
+<select id="voz">
+<option>Com narração em português</option>
+<option>Sem narração, apenas imagens</option>
+</select>
+
+<button class="primary" onclick="criar()">✨ Criar meu projeto</button>
+<p class="muted">Cria um roteiro original e instruções para gerar as cenas com ferramentas de IA.</p>
+</section>
+
+<section class="card" id="resultadoCard" hidden>
+<h2>🪄 Seu projeto está pronto!</h2>
+<div id="resultado" class="result"></div>
+<div class="row">
+<button class="secondary" onclick="copiar()">📋 Copiar texto</button>
+<button class="secondary" onclick="baixar()">⬇ Baixar TXT</button>
+</div>
+<div class="row">
+<button class="secondary" onclick="salvar()">💾 Salvar projeto</button>
+<button class="secondary" onclick="compartilhar()">↗ Compartilhar</button>
+</div>
+</section>
+
+<section class="card">
+<h2>📁 Meus projetos</h2>
+<div id="lista"><p class="muted">Seus projetos salvos aparecerão aqui.</p></div>
+<button class="secondary" onclick="apagar()">Apagar projetos salvos</button>
+</section>
+
+<section class="card">
+<h2>🎥 Gerar o vídeo com IA</h2>
+<p>Depois de criar seu roteiro, você pode usar um gerador externo para transformar as instruções em cenas de vídeo.</p>
+<button class="secondary" onclick="abrirGerador()">Explorar geradores de vídeo IA</button>
+<p class="muted">A geração automática de vídeo não está integrada nesta versão. Alguns serviços podem exigir cadastro ou pagamento.</p>
+</section>
+</main>
+<footer>IA Vídeo Studio · Criatividade com inteligência artificial</footer>
+
+<script>
+let textoAtual = "";
+
+function criar(){
+  const tema = document.getElementById("tema").value.trim();
+  if(!tema){
+    alert("Escreva o tema do seu vídeo primeiro.");
+    return;
+  }
+
+  const categoria = document.getElementById("categoria").value;
+  const formato = document.getElementById("formato").value;
+  const duracao = document.getElementById("duracao").value;
+  const visual = document.getElementById("visual").value;
+  const voz = document.getElementById("voz").value;
+
+  let cenas;
+
+  if(duracao === "15 segundos"){
+    cenas = [
+      ["0–3 segundos","GANCHO","Mostre uma imagem surpreendente e apresente o tema."],
+      ["3–11 segundos","CONTEÚDO","Demonstre a ideia principal com cortes rápidos."],
+      ["11–15 segundos","FINAL","Mostre o resultado e convide o público a acompanhar."]
+    ];
+  }else if(duracao === "30 segundos"){
+    cenas = [
+      ["0–3 segundos","GANCHO","Comece com uma pergunta que desperte curiosidade."],
+      ["3–10 segundos","INTRODUÇÃO","Apresente o assunto e o que será mostrado."],
+      ["10–24 segundos","DESENVOLVIMENTO","Mostre as etapas principais com imagens claras."],
+      ["24–30 segundos","RESULTADO","Mostre a conclusão e incentive comentários."]
+    ];
+  }else if(duracao === "60 segundos"){
+    cenas = [
+      ["0–5 segundos","GANCHO","Apresente uma pergunta ou cena chamativa."],
+      ["5–15 segundos","INTRODUÇÃO","Explique o que o público vai descobrir."],
+      ["15–40 segundos","DESENVOLVIMENTO","Apresente as etapas e os detalhes importantes."],
+      ["40–53 segundos","RESULTADO","Mostre a conclusão ou o resultado final."],
+      ["53–60 segundos","ENCERRAMENTO","Convide o público a comentar e se inscrever."]
+    ];
+  }else{
+    cenas = [
+      ["0–15 segundos","ABERTURA","Apresente o tema e desperte curiosidade."],
+      ["15–60 segundos","PARTE 1","Explique a primeira parte com exemplos visuais."],
+      ["1–2 minutos","PARTE 2","Desenvolva as etapas com mais detalhes."],
+      ["2–2:40 minutos","CONCLUSÃO","Resuma as ideias e mostre o resultado."],
+      ["2:40–3 minutos","ENCERRAMENTO","Finalize e convide o público a acompanhar."]
+    ];
+  }
+
+  let roteiro = "IA VÍDEO STUDIO\n";
+  roteiro += "========================\n";
+  roteiro += "TEMA: " + tema + "\n";
+  roteiro += "CATEGORIA: " + categoria + "\n";
+  roteiro += "FORMATO: " + formato + "\n";
+  roteiro += "DURAÇÃO: " + duracao + "\n";
+  roteiro += "ESTILO: " + visual + "\n\n";
+  roteiro += "ROTEIRO POR CENAS\n\n";
+
+  cenas.forEach((c,i)=>{
+    roteiro += "CENA " + (i+1) + " — " + c[1] + "\n";
+    roteiro += "Tempo: " + c[0] + "\n";
+    roteiro += "Imagem: " + c[2] + "\n";
+    roteiro += "Prompt visual: " + visual +
+      ", sobre " + tema +
+      ", composição profissional, iluminação bem trabalhada, " +
+      "movimentos naturais de câmera, alta qualidade, formato " +
+      formato + ".\n";
+
+    if(voz === "Com narração em português"){
+      roteiro += "Narração sugerida: " +
+        (i===0
+          ? "Você já conhece " + tema + "? Vamos descobrir!"
+          : i===cenas.length-1
+          ? "Gostou? Comente o que achou e acompanhe o canal!"
+          : "Agora vamos conhecer mais detalhes sobre " + tema + ".")
+        + "\n";
+    }
+    roteiro += "\n";
+  });
+
+  roteiro += "PROMPT GERAL PARA IA DE VÍDEO\n";
+  roteiro += "Crie um vídeo sobre " + tema +
+    ". Categoria: " + categoria +
+    ". Estilo visual: " + visual +
+    ". Duração: " + duracao +
+    ". Formato: " + formato +
+    ". Organize a história em cenas coerentes, com transições naturais, " +
+    "iluminação consistente e imagens envolventes. " +
+    "Idioma: português brasileiro. " +
+    "Evite textos distorcidos dentro das imagens.\n\n";
+
+  roteiro += "LEGENDA SUGERIDA\n";
+  roteiro += tema + " ✨ O que você acha? Conte nos comentários!\n\n";
+  roteiro += "#InteligenciaArtificial #Criatividade #Videos";
+
+  textoAtual = roteiro;
+  document.getElementById("resultado").textContent = roteiro;
+  document.getElementById("resultadoCard").hidden = false;
+  document.getElementById("resultadoCard").scrollIntoView({behavior:"smooth"});
+}
+
+async function copiar(){
+  if(!textoAtual) return;
+  try{
+    await navigator.clipboard.writeText(textoAtual);
+    alert("Texto copiado!");
+  }catch(e){
+    alert("Não foi possível copiar automaticamente. Selecione o texto e copie manualmente.");
+  }
+}
+
+function baixar(){
+  if(!textoAtual) return;
+  const blob = new Blob([textoAtual],{type:"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "meu-projeto-de-video.txt";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function salvar(){
+  if(!textoAtual) return;
+  try{
+    const projetos = JSON.parse(localStorage.getItem("iavideo") || "[]");
+    projetos.unshift({
+      tema:document.getElementById("tema").value.trim(),
+      texto:textoAtual
+    });
+    localStorage.setItem("iavideo",JSON.stringify(projetos.slice(0,30)));
+    mostrarProjetos();
+    alert("Projeto salvo neste aparelho!");
+  }catch(e){
+    alert("Não foi possível salvar. Verifique o espaço disponível no navegador.");
+  }
+}
+
+function mostrarProjetos(){
+  const lista = document.getElementById("lista");
+  const projetos = JSON.parse(localStorage.getItem("iavideo") || "[]");
+  lista.replaceChildren();
+
+  if(!projetos.length){
+    lista.innerHTML='<p class="muted">Seus projetos salvos aparecerão aqui.</p>';
+    return;
+  }
+
+  projetos.forEach((p,i)=>{
+    const div = document.createElement("div");
+    div.className = "project";
+    const nome = document.createElement("p");
+    nome.textContent = p.tema || "Projeto sem título";
+    const abrir = document.createElement("button");
+    abrir.className = "secondary";
+    abrir.textContent = "Abrir projeto";
+    abrir.onclick = ()=>{
+      textoAtual = p.texto;
+      document.getElementById("resultado").textContent = textoAtual;
+      document.getElementById("resultadoCard").hidden = false;
+      document.getElementById("resultadoCard").scrollIntoView({behavior:"smooth"});
+    };
+    div.append(nome,abrir);
+    lista.append(div);
+  });
+}
+
+function apagar(){
+  if(confirm("Deseja apagar todos os projetos salvos?")){
+    localStorage.removeItem("iavideo");
+    mostrarProjetos();
+  }
+}
+
+async function compartilhar(){
+  if(!textoAtual) return;
+  if(navigator.share){
+    try{
+      await navigator.share({title:"Meu projeto de vídeo",text:textoAtual});
+    }catch(e){}
+  }else{
+    copiar();
+  }
+}
+
+function abrirGerador(){
+  window.open("https://www.capcut.com/","_blank","noopener");
+}
+
+mostrarProjetos();
+</script>
+</body>
+</html>
